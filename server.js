@@ -9,6 +9,7 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 const mongoUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/self_mba_tracker";
+let mongoConnectionPromise;
 
 const entrySchema = new mongoose.Schema(
   {
@@ -24,11 +25,32 @@ const entrySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Entry = mongoose.model("Entry", entrySchema);
+const Entry = mongoose.models.Entry || mongoose.model("Entry", entrySchema);
+
+function connectDatabase() {
+  if (mongoose.connection.readyState === 1) {
+    return Promise.resolve();
+  }
+
+  if (!mongoConnectionPromise) {
+    mongoConnectionPromise = mongoose.connect(mongoUri);
+  }
+
+  return mongoConnectionPromise;
+}
 
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use("/api", async (req, res, next) => {
+  try {
+    await connectDatabase();
+    next();
+  } catch (error) {
+    res.status(500).json({ message: "Database connection failed." });
+  }
+});
 
 app.get("/api/entries", async (req, res) => {
   const entries = await Entry.find().sort({ date: -1, createdAt: -1 }).lean();
@@ -92,7 +114,7 @@ app.get("*", (req, res) => {
 
 async function start() {
   try {
-    await mongoose.connect(mongoUri);
+    await connectDatabase();
     app.listen(port, () => {
       console.log(`Self-MBA tracker running at http://localhost:${port}`);
     });
@@ -102,4 +124,8 @@ async function start() {
   }
 }
 
-start();
+if (require.main === module) {
+  start();
+}
+
+module.exports = app;
