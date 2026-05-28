@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Self-MBA Tracker</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="header">
+        <div>
+          <p class="eyebrow">12-Month Plan</p>
+          <h1>Self-MBA Progress Tracker</h1>
+          <p class="summary">Track daily reading, core learning, practice, and notes from the master learning sheet.</p>
+        </div>
+        <div class="stats">
+          <span><strong id="totalEntries">0</strong> entries</span>
+          <span><strong id="totalHours">0</strong> hours</span>
+          <span><strong id="completedEntries">0</strong> done</span>
+        </div>
+      </section>
+
+      <section class="layout">
+        <form id="entryForm" class="panel">
+          <h2>Add learning entry</h2>
+          <label>
+            Date
+            <input type="date" name="date" required>
+          </label>
+
+          <div class="row">
+            <label>
+              Month
+              <select name="month" id="monthSelect" required></select>
+            </label>
+            <label>
+              Week
+              <select name="week" required>
+                <option value="1">Week 1</option>
+                <option value="2">Week 2</option>
+                <option value="3">Week 3</option>
+                <option value="4">Week 4</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            Focus
+            <input name="focus" id="focusInput" placeholder="Main learning topic" required>
+          </label>
+
+          <label>
+            Reading source
+            <select name="source">
+              <option value="">No source selected</option>
+              <option>The Economist</option>
+              <option>Mint</option>
+              <option>Business Standard</option>
+              <option>Harvard Business Review</option>
+              <option>McKinsey Insights</option>
+              <option>Y Combinator Essays</option>
+              <option>Paul Graham Essays</option>
+              <option>TechCrunch</option>
+              <option>Stratechery</option>
+            </select>
+          </label>
+
+          <div class="row">
+            <label>
+              Minutes
+              <input type="number" name="minutes" min="0" value="120" required>
+            </label>
+            <label class="check">
+              <input type="checkbox" name="completed">
+              Completed today
+            </label>
+          </div>
+
+          <label>
+            Notes
+            <textarea name="notes" rows="5" placeholder="Summary, case study insight, project progress"></textarea>
+          </label>
+
+          <button type="submit">Save entry</button>
+          <p id="formMessage" class="message"></p>
+        </form>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Learning plan</h2>
+            <span id="selectedPlan">Month 1</span>
+          </div>
+          <div id="planDetails" class="plan"></div>
+        </section>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Saved entries</h2>
+          <button id="refreshButton" class="secondary" type="button">Refresh</button>
+        </div>
+        <div id="entries" class="entries"></div>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

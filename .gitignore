@@ -1,0 +1,6 @@
+.DS_Store
+node_modules/
+.env
+.expo/
+data/*.log
+data/*.log.*
